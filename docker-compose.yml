@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+    db:
+        image: mysql:8.0
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 12345678
+            MYSQL_DATABASE: "bank-system"
+        volumes:
+            - db:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        networks:
+            - bank_net
+    queue:
+        image: redis:latest
+        restart: always
+        volumes:
+            - cache:/data
+        ports:
+            - "6379:6379"
+        networks:
+            - bank_net
+
+volumes:
+    db:
+        driver: local
+    cache:
+        driver: local
+
+networks:
+    bank_net:
